@@ -50,14 +50,15 @@ class Preparator
 
             Dotenv::makeMutable();
             Dotenv::load(dirname($env_file), basename($env_file));
-
+            $this->myCommand->info('running artisan config:cache');
             Artisan::call('config:cache', array());
         } else {
             $this->moveEnvForDeploy($env_file, $env_production_file, $env_local_file);
 
             Dotenv::makeMutable();
             Dotenv::load(dirname($env_file), basename($env_file));
-
+            
+            $this->myCommand->info('running artisan config:cache');
             $result = Artisan::call('config:cache', array());
             if ($result === 0) {
                 $this->processFile($cached_config_php, ['fixCachedConfig']);
@@ -76,9 +77,8 @@ class Preparator
     protected function moveEnvForDeploy($env_file, $env_production_file, $env_local_file)
     {
         if ( is_file($env_production_file) ) {
-            $this->myCommand->info('Moving .env.production to .env ready for deployment.');
-            rename($env_file, $env_local_file);
-            rename($env_production_file, $env_file);
+            $this->myCommand->info('Copy .env.production to .env ready for deployment.');
+            copy($env_production_file, $env_file);
         }
     }
 
@@ -92,9 +92,8 @@ class Preparator
     protected function moveEnvForLocal($env_file, $env_production_file, $env_local_file)
     {
         if ( is_file($env_local_file) ) {
-            $this->myCommand->info('Moving .env.local to .env ready for local development.');
-            rename($env_file, $env_production_file);
-            rename($env_local_file, $env_file);
+            $this->myCommand->info('Copy .env.local to .env ready for local development.');
+            copy($env_local_file, $env_file);
         }
     }
 
