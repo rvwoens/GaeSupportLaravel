@@ -125,3 +125,10 @@ There are a set of helper functions included that you can use for GAE specific p
    * Are we running on App Engine Standard Environment, also returns true for the Local SDK.
  * `is_gae_flex()`
    * Are we running on App Engine Flexible Environment.
+
+## Generate config files
+	app.yaml
+	php.ini
+	.env.local
+	.env.production
+
